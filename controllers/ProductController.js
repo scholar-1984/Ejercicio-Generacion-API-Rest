@@ -2,10 +2,10 @@ const Product = require('../services/Product');
 
 class ProductController {
 
-  static GetAll = async () => {
+  static GetAll = async (res) => {
     try {
       const products = await Product.Get();
-      return products;
+      res.send(products)
 
     } catch (e) {
       throw e;
@@ -84,6 +84,22 @@ class ProductController {
       res.status(500).json({ message: "Error en el servidor" })
     }
 
+  }
+
+  static Find = async (res, a_encontrar) => {
+    try {
+      let resultado_operacion = `No existe el producto con id ${a_encontrar}`
+      const producto_buscado = await Product.Find(a_encontrar)
+      if (producto_buscado === null) {
+        res.send({ "Resultado Operación": resultado_operacion })
+      }
+      else {
+        res.send(producto_buscado)
+      }
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ message: "Error en el servidor" })
+    }
   }
 }
 
