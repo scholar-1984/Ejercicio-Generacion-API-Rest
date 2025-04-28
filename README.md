@@ -2,7 +2,7 @@
 
 ## Listado de endpoints
 
-GET /products/create  
+POST /products/create  
 
 PUT /products/update/_{Insertar id de producto deseado}_  
 
