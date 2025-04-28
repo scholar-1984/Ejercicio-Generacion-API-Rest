@@ -40,5 +40,23 @@ Create = async() => {
       }
 
 }
+static Delete = async(a_borrar) =>{
+    try{
+    const cn = await Database.connect()
+    const sql_borrar = "DELETE FROM products WHERE product_id = ? LIMIT 1"
+    const registro_a_borrar = [a_borrar]
+    const [resultado, campos] = await cn.execute(sql_borrar,registro_a_borrar)
+    if (resultado.affectedRows === 1){
+        return true
+    }
+    else{
+    return false
+    }
+    //console.log(`SE EJECUTO UNA SENTENCIA DELETE EL RESULTADO FUE: ${resultado.affectedRows} LOS CAMPOS: ${campos}`)
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
 }
 module.exports = Product;

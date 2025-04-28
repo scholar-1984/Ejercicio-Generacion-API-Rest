@@ -15,4 +15,7 @@ router.get('/products/list', async (req, res) => {
 router.get('/products/create', async (req, res) => { 
     ProductController.Form(res);
    })
+router.delete("/products/delete/:product_id",async(req, res) =>{
+    ProductController.Delete(res, req.params.product_id)
+})
 module.exports = router;
