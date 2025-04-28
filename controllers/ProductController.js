@@ -57,20 +57,34 @@ class ProductController {
     res.render('productForm');
   }
 
-  static Delete = async (res,a_eliminar) => {
+  static Delete = async (res, a_eliminar) => {
     try {
       let resultado_operacion = `No existe el producto con id ${a_eliminar}`
       const ejecutado_con_exito = await Product.Delete(a_eliminar)
-      if (ejecutado_con_exito){
-      resultado_operacion = `El producto con id ${a_eliminar} fue eliminado exitosamente!`
+      if (ejecutado_con_exito) {
+        resultado_operacion = `El producto con id ${a_eliminar} fue eliminado exitosamente!`
       }
-      res.send({"Resultado Operación":resultado_operacion})
-    } catch (err){
+      res.send({ "Resultado Operación": resultado_operacion })
+    } catch (err) {
       console.log(err)
       res.status(500).json({ message: "Error en el servidor" })
     }
   }
 
+  static Update = async (res, a_actualizar, datos) => {
+    try {
+      let resultado_operacion = `No existe el producto con id ${a_actualizar}`
+      const ejecutado_con_exito = await Product.Update(a_actualizar, datos)
+      if (ejecutado_con_exito) {
+        resultado_operacion = `El producto con id ${a_actualizar} fue actualizado exitosamente!`
+      }
+      res.send({ "Resultado Operación": resultado_operacion })
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ message: "Error en el servidor" })
+    }
+
+  }
 }
 
 

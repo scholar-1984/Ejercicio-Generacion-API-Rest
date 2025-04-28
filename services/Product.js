@@ -8,55 +8,75 @@ class Product {
     #price;
     #stock_quantity;
 
-constructor(id, name, description, price, stock) {
-    this.#product_id = id;
-    this.#name = name;
-    this.#description = description;
-    this.#price = price;
-    this.#stock_quantity = stock;
-}
+    constructor(id, name, description, price, stock) {
+        this.#product_id = id;
+        this.#name = name;
+        this.#description = description;
+        this.#price = price;
+        this.#stock_quantity = stock;
+    }
 
-static Get = async () => {
-try {
-    const cn = await Database.connect();
-    const sql = 'SELECT * FROM products ORDER BY name';
-    const [rows, fields] = await cn.query(sql);
-    return rows
-}catch(e) {
-    console.log(e);
-    throw e;
-} 
-}
+    static Get = async () => {
+        try {
+            const cn = await Database.connect();
+            const sql = 'SELECT * FROM products ORDER BY name';
+            const [rows, fields] = await cn.query(sql);
+            return rows
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
 
-Create = async() => {
-    try {
-        const cn = await Database.connect();
-        const sql = 'INSERT INTO products (name, description, price, stock_quantity) VALUES(?, ?, ?, ?);';
-        const values = [this.#name, this.#description, this.#price, this.#stock_quantity];
-        const [result, fields] = await cn.execute(sql, values);
-         return {lastInsertId: result.insertId};
-      } catch (err) {
-        console.log(err);
-      }
+    Create = async () => {
+        try {
+            const cn = await Database.connect();
+            const sql = 'INSERT INTO products (name, description, price, stock_quantity) VALUES(?, ?, ?, ?);';
+            const values = [this.#name, this.#description, this.#price, this.#stock_quantity];
+            const [result, fields] = await cn.execute(sql, values);
+            return { lastInsertId: result.insertId };
+        } catch (err) {
+            console.log(err);
+        }
 
-}
-static Delete = async(a_borrar) =>{
-    try{
-    const cn = await Database.connect()
-    const sql_borrar = "DELETE FROM products WHERE product_id = ? LIMIT 1"
-    const registro_a_borrar = [a_borrar]
-    const [resultado, campos] = await cn.execute(sql_borrar,registro_a_borrar)
-    if (resultado.affectedRows === 1){
-        return true
     }
-    else{
-    return false
+    static Delete = async (a_borrar) => {
+        try {
+            const cn = await Database.connect()
+            const sql_borrar = "DELETE FROM products WHERE product_id = ? LIMIT 1"
+            const registro_a_borrar = [a_borrar]
+            const [resultado, campos] = await cn.execute(sql_borrar, registro_a_borrar)
+            if (resultado.affectedRows === 1) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        catch (err) {
+            console.log(err)
+            throw(err)
+        }
     }
-    //console.log(`SE EJECUTO UNA SENTENCIA DELETE EL RESULTADO FUE: ${resultado.affectedRows} LOS CAMPOS: ${campos}`)
+    static Update = async (a_actualizar, datos) => {
+        try {
+            const cn = await Database.connect()
+            const sql_actualizar = "UPDATE products \
+            SET name=?, description=?, price=?, stock_quantity=? \
+            WHERE product_id=?"
+            const valores = [datos.name, datos.description, datos.price, datos.stock_quantity, a_actualizar]
+            const [resultado, campos] = await cn.execute(sql_actualizar, valores)
+            if (resultado.affectedRows === 1) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        catch (err) {
+            console.log(err)
+            throw(err)
+        }
     }
-    catch (err) {
-        console.log(err)
-    }
-}
 }
 module.exports = Product;
